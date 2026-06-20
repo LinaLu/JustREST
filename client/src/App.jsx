@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 
+const API = import.meta.env.VITE_API_URL || ''
+
 function formatDateTime(isoString) {
   const d = new Date(isoString)
   const hours = d.getHours().toString().padStart(2, '0')
@@ -32,7 +34,7 @@ export default function App() {
   const fetchAppointments = () => {
     setLoading(true)
     setError(null)
-    fetch('/api/appointments')
+    fetch(`${API}/api/appointments`)
       .then((r) => r.json())
       .then((data) => {
         setAppointments(data)
@@ -52,7 +54,7 @@ export default function App() {
     setSelectedAppointmentId(appointmentExternalId)
     setLoading(true)
     setError(null)
-    fetch('/api/timeslots')
+    fetch(`${API}/api/timeslots`)
       .then((r) => r.json())
       .then((data) => {
         setTimeslots(data)
@@ -68,7 +70,7 @@ export default function App() {
   const handleTimeslotSelect = (timeslot) => {
     setLoading(true)
     setError(null)
-    fetch(`/api/appointments/${selectedAppointmentId}/reschedule`, {
+    fetch(`${API}/api/appointments/${selectedAppointmentId}/reschedule`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ externalReference: timeslot.externalReference }),
